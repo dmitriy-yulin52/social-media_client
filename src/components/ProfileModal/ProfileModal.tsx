@@ -23,7 +23,7 @@ export const ProfileModal: FC<ProfileModalProps> = memo(function ProfileModal(pr
             overlayOpacity={0.55}
             overlayBlur={3}
             size={'55%'}
-            title="Introduce yourself!"
+            title="Настройки"
         >
             <form className={'infoForm'}>
                 <h3>Ваша информация</h3>
@@ -61,8 +61,9 @@ export const ProfileModal: FC<ProfileModalProps> = memo(function ProfileModal(pr
                     Фотография профиля
                     <input type="file" name={'profileImage'}/>
                     Обложка профиля
-                    <input type="file" name={'profileImage'}/>
+                    <input type="file" name={'coverImage'}/>
                 </div>
+                <button className={'button infoButton'}>Обновить</button>
             </form>
         </Modal>
     );

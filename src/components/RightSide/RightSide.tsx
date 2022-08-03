@@ -6,10 +6,19 @@ import Noti from '../../assets/img/noti.png'
 import Comment from '../../assets/img/comment.png'
 import {UilSetting} from '@iconscout/react-unicons'
 import {TrendCard} from "../TrendCard/TrendCard";
+import {useCallback, useState} from "react";
+import {ShareModal} from "../ShareModal/ShareModal";
 
 
 type RightSideProps = {};
 export const RightSide = (props: RightSideProps) => {
+
+    const [modalOpened, SetModalOpened] = useState<boolean>(false)
+
+    const onClickOpenModal = useCallback(() => {
+        SetModalOpened(!modalOpened)
+    }, [SetModalOpened, modalOpened])
+
     return (
         <div className={'RightSide'}>
             <div className="navIcons">
@@ -19,9 +28,10 @@ export const RightSide = (props: RightSideProps) => {
                 <img src={Comment} alt="Comment"/>
             </div>
             <TrendCard/>
-            <button className={'button r-button'}>
+            <button className={'button r-button'} onClick={onClickOpenModal}>
                 Поделиться
             </button>
+            <ShareModal open={modalOpened} onOpenModal={onClickOpenModal}/>
         </div>
     );
 };
