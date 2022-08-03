@@ -1,0 +1,80 @@
+@import 'src/styles/variables';
+
+.Auth {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  gap: 4rem;
+  position: relative;
+
+  .a-left {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 2rem;
+
+    img {
+      width: 4rem;
+      height: 4rem;
+    }
+
+    .Webname {
+      h1 {
+        font-size: 3rem;
+      }
+
+      h6 {
+        font-size: 0.85rem;
+      }
+    }
+  }
+
+}
+
+
+.infoForm {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 2rem;
+
+  div {
+    display: flex;
+    gap: 1rem;
+    height: 2rem;
+    width: 90%;
+  }
+
+  .infoInput {
+    border: none;
+    outline: none;
+    background-color: $inputColor;
+    border-radius: 8px;
+    padding: 20px;
+    flex: 1;
+  }
+  .infoButton{
+    width: 7rem;
+    height: 2rem;
+    align-self: flex-end;
+  }
+  .infoText{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    span{
+      font-size: 12px;
+    }
+  }
+}
+
+.authForm{
+  background-color: $cardColor;
+  border-radius: 1rem;
+  padding: 1rem;
+  div{
+    width: 100%;
+  }
+}
