@@ -32,7 +32,7 @@ export const Post: FC<PostProps> = memo(({data, id}): ReactElement => {
                 <img src={Share} alt=""/>
             </div>
 
-            <span>{data.likes} likes</span>
+            <span className={'Post-likes'}>{data.likes} likes</span>
 
             <div className="detail">
                 <span><b>{data.name}</b></span>

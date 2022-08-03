@@ -5,6 +5,9 @@ import Cover from '../../assets/img/cover.jpg'
 
 type Props = {};
 export const ProfileCard = (props: Props) => {
+
+
+    const ProfilePage = true
     return (
         <div className={'ProfileCard'}>
             <div className="ProfileImages">
@@ -28,10 +31,21 @@ export const ProfileCard = (props: Props) => {
                         <span>1</span>
                         <span>Подписчики</span>
                     </div>
+                    {ProfilePage &&
+                        <>
+                            <div className="vl">
+
+                            </div>
+                            <div className="follow">
+                                <span>3</span>
+                                <span>Посты</span>
+                            </div>
+                        </>
+                    }
                 </div>
                 <hr/>
             </div>
-            <span className={'subtitle'}>Мой Профиль</span>
+            {ProfilePage ? '' : <span className={'subtitle'}>Мой Профиль</span>}
         </div>
     );
 };
