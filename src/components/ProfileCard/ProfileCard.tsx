@@ -31,7 +31,7 @@ export const ProfileCard = (props: Props) => {
                 </div>
                 <hr/>
             </div>
-            <span className={'my-profile'}>Мой Профиль</span>
+            <span className={'subtitle'}>Мой Профиль</span>
         </div>
     );
 };

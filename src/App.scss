@@ -7,7 +7,6 @@
   background: #f3f3f3;
   padding: 1rem;
 
-
   .blur {
     position: absolute;
     width: 22rem;
@@ -26,6 +25,29 @@
     top: 36%;
     left: -8rem;
   }
+}
+
+
+.button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  border: 2px solid white;
+  border-radius: 0.5rem;
+  background: $buttonBg;
+  transition: all 100ms ease-in-out;
+}
+.button:hover {
+  cursor: pointer;
+  color: $orange;
+  background: transparent;
+  border: 2px solid $orange;
+}
+
+
+::-webkit-scrollbar{
+  display: none;
 }
 
 

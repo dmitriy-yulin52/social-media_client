@@ -9,7 +9,7 @@
   overflow-x: clip;
   background: $cardColor;
 
-  .my-profile {
+  .subtitle {
     font-weight: bold;
     color: orange;
     align-self: center;
@@ -36,6 +36,7 @@
       position: absolute;
       bottom: -3rem;
       box-shadow: $profileShadow;
+      object-fit: cover;
     }
   }
 
