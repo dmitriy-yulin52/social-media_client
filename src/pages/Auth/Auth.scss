@@ -39,6 +39,7 @@
   justify-content: center;
   align-items: center;
   gap: 2rem;
+  min-width: 300px;
 
   div {
     display: flex;
@@ -50,19 +51,24 @@
   .infoInput {
     border: none;
     outline: none;
+    height: 1rem;
     background-color: $inputColor;
     border-radius: 8px;
     padding: 20px;
     flex: 1;
+  }
+  .infoInputError{
+    border: 1px solid red;
   }
   .infoButton{
     width: 7rem;
     height: 2rem;
     align-self: flex-end;
   }
+
   .infoText{
     display: flex;
-    justify-content: center;
+    justify-content: flex-end;
     align-items: center;
     span{
       font-size: 12px;
@@ -77,4 +83,12 @@
   div{
     width: 100%;
   }
+}
+
+
+.confirmSpan{
+  color:red;
+  font-size: 12px;
+  align-self: flex-end;
+  margin-right: 5px;
 }

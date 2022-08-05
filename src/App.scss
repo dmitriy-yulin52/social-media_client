@@ -6,6 +6,7 @@
   color: $black;
   background: #f3f3f3;
   padding: 1rem;
+  height: 100%;
 
   .blur {
     position: absolute;
@@ -43,6 +44,11 @@
   color: $orange;
   background: transparent;
   border: 2px solid $orange;
+}
+
+.button:disabled{
+  background: silver;
+  pointer-events: none;
 }
 
 

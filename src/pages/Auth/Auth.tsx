@@ -1,10 +1,125 @@
 import * as React from 'react';
+import {ChangeEvent, FormEvent, memo, MouseEvent, ReactElement, useCallback, useEffect, useMemo, useState} from 'react';
 import './Auth.scss'
 import Logo from '../../assets/img/logo.png'
-import {memo} from "react";
+import {classnames} from "../../utils/classnames";
+import {authActions} from "../../store/reducers/auth/auth-actions";
+import {useDispatch} from "react-redux";
+import {useTypedSelector} from "../../utils/hooks/useTypedSelector";
 
 type Props = {};
-export const Auth = (props: Props) => {
+
+
+const data = {
+    firstname: '',
+    lastname: '',
+    username: '',
+    password: '',
+    confirmPassword: '',
+}
+
+export type FormDataType = {
+    [Property in keyof typeof data]: string
+}
+
+export const Auth = (props: Props): ReactElement => {
+
+    const {isLoading} = useTypedSelector(state => state.auth)
+    const dispatch = useDispatch()
+
+
+    const [isSignUp, setIsSignUp] = useState<boolean>(true)
+    const [confirmPass, setConfirmPass] = useState<boolean>(false)
+    const [error, setError] = useState<boolean>(false)
+    const [formData, setFormData] = useState<FormDataType>(data)
+
+
+    const memomizeArrError: boolean[] = useMemo(() => {
+        const arr: boolean[] = []
+        Object.entries(formData).forEach(([key, value]) => {
+            if (!value) {
+                arr.push(!value)
+            }
+        })
+        return arr
+    }, [formData])
+
+
+
+    const onChangeHandler = useCallback((e: ChangeEvent<HTMLInputElement>) => {
+        const {name, value} = e.currentTarget;
+        setFormData((prevState) => ({
+            ...prevState,
+            [name]: value
+        }))
+        if (confirmPass) {
+            setConfirmPass(false)
+        }
+        if (error) {
+            setError(false)
+        }
+
+    }, [setFormData, confirmPass, setConfirmPass, error, setError])
+
+    const onClickSetIsSignUp = useCallback((e: MouseEvent<HTMLAnchorElement>) => {
+        e.preventDefault()
+        setIsSignUp(!isSignUp)
+    }, [setIsSignUp, isSignUp])
+
+    const resetFormDataHandler = useCallback(() => {
+        setConfirmPass(false)
+        setFormData({
+            firstname: '',
+            lastname: '',
+            username: '',
+            password: '',
+            confirmPassword: '',
+        })
+    }, [setFormData])
+
+
+    const onRegister = useCallback(() => {
+        dispatch(authActions.register(formData))
+        // resetFormDataHandler()
+    }, [dispatch])
+
+    const handleSubmit = useCallback((e: FormEvent<HTMLFormElement>) => {
+        e.preventDefault()
+        setConfirmPass(false)
+        const someError = Object.entries(formData).some(([key, value]) => !value)
+        if (isSignUp) {
+            formData.password === formData.confirmPassword ? dispatch(authActions.register(formData)) : setConfirmPass(true)
+            if (someError) {
+                setError(true)
+            }
+        } else {
+            if (!formData.username || !formData.password) {
+                setError(true)
+            } else {
+                dispatch(authActions.login({
+                    password: formData.password,
+                    username: formData.username
+                }))
+                // resetFormDataHandler()
+            }
+        }
+    }, [setConfirmPass, isSignUp, formData, dispatch, setError])
+
+
+    useEffect(() => {
+        setConfirmPass(false)
+        setFormData({
+            firstname: '',
+            lastname: '',
+            username: '',
+            password: '',
+            confirmPassword: '',
+        })
+        setError(false)
+    }, [isSignUp])
+
+
+
     return (
         <div className={'Auth'}>
             <div className="a-left">
@@ -14,67 +129,114 @@ export const Auth = (props: Props) => {
                     <h6>Исследуйте идеи по всему миру</h6>
                 </div>
             </div>
-            {/*<SignUp/>*/}
-            <SignIn/>
+            <FormComponent
+                error={error}
+                handleSubmit={handleSubmit}
+                confirmPass={confirmPass}
+                onChangeHandler={onChangeHandler}
+                isSignUp={isSignUp}
+                onSetIsSignUp={onClickSetIsSignUp}
+                formData={formData}
+                dataErr={memomizeArrError}
+                isLoading={isLoading}
+            />
         </div>
     );
 };
 
-
-function SignUpImpl() {
-    return <div className={'a-right'}>
-        <form className={'infoForm authForm'}>
-            <h3>Регистрация</h3>
-            <div>
-                <input type="text" placeholder={'Имя'} className={'infoInput'} name={'firstname'}/>
-                <input type="text" placeholder={'Фамилия'} className={'infoInput'} name={'lastname'}/>
-            </div>
-            <div>
-                <input type="text" className="infoInput" placeholder={'Никнейм'} name={'username'}/>
-            </div>
-            <div>
-                <input type="text" className="infoInput" name={'password'} placeholder={'Пароль'}/>
-                <input type="text" className="infoInput" name={'confirmPassword'} placeholder={'Подтвердить пароль'}/>
-            </div>
-            <div className={'infoText'}>
-                <span>У вас уже есть учетная запись</span>
-            </div>
-            <button className={'button infoButton'} type={'submit'}>Регистрация</button>
-
-        </form>
-    </div>
+type RegisterComponentImplProps = {
+    isSignUp: boolean
+    confirmPass: boolean
+    error: boolean
+    isLoading: boolean
+    onSetIsSignUp: (e: MouseEvent<HTMLAnchorElement>) => void
+    onChangeHandler: (e: ChangeEvent<HTMLInputElement>) => void
+    handleSubmit: (e: FormEvent<HTMLFormElement>) => void
+    formData: FormDataType
+    dataErr: boolean[]
 }
 
-const SignUp = memo(SignUpImpl);
+function FormComponentImpl(props: RegisterComponentImplProps): ReactElement {
+
+    const {
+        isSignUp,
+        onSetIsSignUp,
+        onChangeHandler,
+        confirmPass,
+        handleSubmit,
+        error,
+        formData,
+        dataErr,
+        isLoading
+    } = props
 
 
-function SignInImpl() {
-    return <div className={'a-right'}>
-        <form className={'infoForm authForm'}>
-            <h3>Войти</h3>
 
-            <div>
+    return <form className={'infoForm authForm'} onSubmit={handleSubmit}>
+        <h3>{isSignUp ? 'Регистрация' : 'Войти'}</h3>
+        {isSignUp && <div>
+            <input
+                onChange={onChangeHandler}
+                type="text"
+                placeholder={'Имя'}
+                className={classnames(['infoInput'], error && !formData.firstname, 'infoInputError')}
+                name={'firstname'}
+                value={formData.firstname}
+
+            />
+            <input
+                onChange={onChangeHandler}
+                type="text"
+                placeholder={'Фамилия'}
+                className={classnames(['infoInput'], error && !formData.lastname, 'infoInputError')}
+                name={'lastname'}
+                value={formData.lastname}
+            />
+        </div>}
+        <div>
+            <input
+                onChange={onChangeHandler}
+                type="text"
+                className={classnames(['infoInput'], error && !formData.username, 'infoInputError')}
+                placeholder={'Никнейм'}
+                name={'username'}
+                value={formData.username}
+            />
+        </div>
+        <div>
+            <input
+                onChange={onChangeHandler}
+                type="password"
+                className={classnames(['infoInput'], error && !formData.password, 'infoInputError')}
+                name={'password'}
+                placeholder={'Пароль'}
+                value={formData.password}
+            />
+            {isSignUp &&
                 <input
-                    type="text"
-                    placeholder={'Имя или email'}
-                    className={'infoInput'}
-                    name={'username'}
-                />
-            </div>
-            <div>
-                <input
-                    type={'password'}
-                    className={'infoInput'}
-                    placeholder={'Пароль'}
-                    name={'password'}
-                />
-            </div>
-            <div className={'infoText'}>
-                <span>У вас нет учетной записи для регистрации</span>
-            </div>
-            <button className={'button infoButton'} type={'submit'}>Войти</button>
-        </form>
-    </div>
+                    onChange={onChangeHandler}
+                    type="password"
+                    className={classnames(['infoInput'], error && !formData.confirmPassword, 'infoInputError')}
+                    name={'confirmPassword'}
+                    placeholder={'Подтвердить пароль'}
+                    value={formData.confirmPassword}
+                />}
+        </div>
+        {isSignUp && confirmPass && <span className={confirmPass ? 'confirmSpan' : ''}>
+            Подтвердите пароль
+        </span>}
+        {error && <span
+            className={error ? 'confirmSpan' : ''}>{dataErr.length > 1 ? 'Заполните поля!' : 'Заполните поле!'}</span>}
+        <div className={'infoText'}>
+            <a href={'/'}
+               onClick={onSetIsSignUp}><span>{isSignUp ? 'У вас уже есть учетная запись!' : 'У вас нет учетной записи?'}</span></a>
+        </div>
+        <button disabled={isLoading} className={'button infoButton'}
+                type={'submit'}>{isLoading ? 'Загрузка...' :isSignUp ? 'Регистрация' : 'Войти'}</button>
+
+    </form>
 }
 
-const SignIn = memo(SignInImpl);
+const FormComponent = memo(FormComponentImpl);
+
+

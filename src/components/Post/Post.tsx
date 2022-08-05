@@ -6,6 +6,7 @@ import Comment from '../../assets/img/comment.png'
 import Share from '../../assets/img/share.png'
 import Heart from '../../assets/img/like.png'
 import NotLike from '../../assets/img/notlike.png'
+import {ResponsePostType} from "../../api/post-api";
 
 
 type PostItemType = {
@@ -17,17 +18,22 @@ type PostItemType = {
 }
 
 type PostProps = {
-    data: PostItemType
-    id: number
+    data:  ResponsePostType
+    userId: string
+    username: string
 };
-export const Post: FC<PostProps> = memo(({data, id}): ReactElement => {
+export const Post: FC<PostProps> = memo(({data, userId,username}): ReactElement => {
+
+    // const findLike = data.likes.find((el)=>el === userId)
+
+console.log(data.image,'image')
     return (
         <div className={'Post'}>
-            <img src={data.img} className={'Post-img'} alt="img"/>
+            <img src={data.image ? process.env.REACT_APP_PUBLIC_FOLDER + data.image : ''} className={'Post-img'} alt="img"/>
 
 
             <div className="postReact">
-                <img src={data.liked ? Heart : NotLike} alt=""/>
+                <img src={true ? Heart : NotLike} alt=""/>
                 <img src={Comment} alt=""/>
                 <img src={Share} alt=""/>
             </div>
@@ -35,7 +41,7 @@ export const Post: FC<PostProps> = memo(({data, id}): ReactElement => {
             <span className={'Post-likes'}>{data.likes} likes</span>
 
             <div className="detail">
-                <span><b>{data.name}</b></span>
+                <span><b>{username}</b></span>
                 <span> {data.desc} </span>
             </div>
         </div>
