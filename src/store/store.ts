@@ -1,9 +1,10 @@
 import {applyMiddleware, combineReducers, compose, createStore} from "redux";
 import thunk from 'redux-thunk'
 import {authReducer} from "./reducers/auth/auth-reducer";
-import {TypedUseSelectorHook, useDispatch} from "react-redux";
+import {useDispatch} from "react-redux";
 import {errorReducer} from "./reducers/error/error-reducer";
 import {postReducer} from "./reducers/post/post-reducer";
+import {usersReducer} from "./reducers/users/users-reducer";
 
 
 declare global {
@@ -21,7 +22,8 @@ export const composeEnhancers =
 const rootReducers = combineReducers({
     auth: authReducer,
     error:errorReducer,
-    posts:postReducer
+    posts:postReducer,
+    users:usersReducer
 })
 
 

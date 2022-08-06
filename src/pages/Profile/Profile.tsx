@@ -13,7 +13,7 @@ export const Profile = (props: ProfileProps) => {
         <div className={'Profile'}>
             <ProfileLeft/>
             <div className="Profile-center">
-                <ProfileCard/>
+                <ProfileCard location={'ProfilePage'}/>
                 <PostSide/>
             </div>
             <RightSide/>

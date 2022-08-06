@@ -1,5 +1,6 @@
 import * as React from 'react';
 import './PostShare.scss'
+import ProfileLogo from '../../assets/img/defaultProfile.png'
 import profileImage from '../../assets/img/profileImg.jpg'
 import {UilScenery} from '@iconscout/react-unicons'
 import {UilPlayCircle} from '@iconscout/react-unicons'
@@ -8,7 +9,6 @@ import {UilSchedule} from '@iconscout/react-unicons'
 import {UilTimes} from '@iconscout/react-unicons'
 import {ChangeEvent, useCallback, useRef, useState, MouseEvent} from "react";
 import {useTypedSelector} from "../../utils/hooks/useTypedSelector";
-import {IUserType} from "../../store/reducers/auth/auth-types";
 import {useDispatch} from "react-redux";
 import {postActions} from "../../store/reducers/post/post-actions";
 
@@ -95,7 +95,7 @@ export const PostShare = (props: Props) => {
 
     return (
         <div className={'PostShare'}>
-            <img src={profileImage} className={'PostShare-img'} alt="ProfileImage"/>
+            <img src={ProfileLogo} className={'PostShare-img'} alt="ProfileImage"/>
             <div className={'inputBlock'}>
                 <input ref={descRef} required type="text" placeholder={'Что происходит'}/>
                 <div className="postOptions">

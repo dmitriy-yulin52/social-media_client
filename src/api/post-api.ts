@@ -11,8 +11,12 @@ export const postApi = {
         const data = instance.post<ResponsePostType>('/post', post)
         return data
     },
-    getTimeLinePosts(id:string){
-        return instance.get(`/post/${id}/timeline`)
+    getTimeLinePosts(id:string):Promise<AxiosResponse<ResponsePostType[]>>{
+        const data =  instance.get(`/post/${id}/timeline`)
+        return data
+    },
+    likePost(postId:string,userId:string){
+        return instance.put(`/post/${postId}/like`,{userId})
     }
 
 }

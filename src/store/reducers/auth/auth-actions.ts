@@ -3,14 +3,18 @@ import {FormDataType} from "../../../pages/Auth/Auth";
 import {authApi} from "../../../api/auth-api";
 import {
     ActionTypeNames,
-    IUserType,
     SetErrorMessageType,
     SetIsAuthType,
     SetIsErrorType,
     SetIsLoadingType,
-    SetUserType
+    SetUserType,
+    UpdateUserType
 } from "./auth-types";
 import {errorActions} from "../error/error-actions";
+import {ProfileDataType} from "../../../components/ProfileModal/ProfileModal";
+import {userApi} from "../../../api/user-api";
+import {usersActions} from "../users/users-actions";
+import {InfoCardUserType} from "../../../components/InfoCard/InfoCard";
 
 
 export const authActions = {
@@ -20,7 +24,9 @@ export const authActions = {
         payload: isLoading
     }),
     setIsAuth: (isAuth: boolean): SetIsAuthType => ({type: ActionTypeNames.SET_IS_AUTH, payload: isAuth}),
-    setUser: (user: IUserType): SetUserType => ({type: ActionTypeNames.SET_USER, payload: user}),
+    setUser: (user: InfoCardUserType | null): SetUserType => {
+                console.log(user,'InfoCardUserType')
+        return {type: ActionTypeNames.SET_USER, payload: user}},
     register,
     setIsError: (isError: boolean): SetIsErrorType => ({type: ActionTypeNames.SET_IS_ERROR, payload: isError}),
     setMessageError: (messageError: string | null): SetErrorMessageType => ({
@@ -28,21 +34,27 @@ export const authActions = {
         payload: messageError
     }),
 
+    logout,
+    updateUserTC,
+    updateUserAC:(user:ProfileDataType):UpdateUserType=>({type:ActionTypeNames.UPDATE_USER,payload:user})
+
 }
 
-function register(formData: Pick<FormDataType, 'confirmPassword'>): any {
+function register(formData: FormDataType): any {
 
     const {confirmPassword, ...rest} = formData
 
     return async (dispatch: DispatchType) => {
         try {
             dispatch(authActions.setIsLoading(true));
-            const {data} = await authApi().register(rest as Pick<FormDataType, 'confirmPassword'>)
-            const {token, user} = data
-            dispatch(authActions.setUser(user))
+            const {data} = await authApi().register(rest)
+            const {token,...user} = data
+            console.log(data,'data . ergister')
+            console.log(user.user,'ergister')
+            dispatch(authActions.setUser(user.user))
             dispatch(authActions.setIsAuth(true));
             window.localStorage.setItem('authRegister', 'true')
-            window.localStorage.setItem('authRegister-user', JSON.stringify(user))
+            window.localStorage.setItem('authRegister-user', JSON.stringify(user.user))
         } catch (e: any) {
             dispatch(errorActions.setIsOpen(true))
             dispatch(errorActions.setMessageError(e.response.data.message))
@@ -57,17 +69,58 @@ function login(formData: { password: string, username: string }): any {
         try {
             dispatch(authActions.setIsLoading(true));
             const {data} = await authApi().login(formData)
-            const {token, user} = data
-            dispatch(authActions.setUser(user));
+            const {token,...rest} = data
+            delete rest.user.password
+            dispatch(authActions.setUser(rest.user));
             dispatch(authActions.setIsAuth(true));
             localStorage.setItem('authRegister', 'true')
-            localStorage.setItem('authRegister-user', JSON.stringify(user))
+            localStorage.setItem('authRegister-user', JSON.stringify(rest.user))
         } catch (e: any) {
             dispatch(errorActions.setIsOpen(true))
             dispatch(errorActions.setMessageError(e.response.data.message))
         } finally {
             dispatch(authActions.setIsLoading(false));
         }
+    }
+}
+
+
+function logout():any{
+    return (dispatch:DispatchType)=>{
+        try{
+            dispatch(authActions.setUser(null));
+            dispatch(authActions.setIsAuth(false));
+            localStorage.removeItem('authRegister')
+            localStorage.removeItem('authRegister-user')
+        }catch (e:any) {
+            dispatch(errorActions.setIsOpen(true))
+            dispatch(errorActions.setMessageError(e.response.data.message))
+        }
+    }
+}
+
+function updateUserTC(id: string, formData:  InfoCardUserType):any {
+
+
+    console.log(formData,'updateUserTC')
+
+    return async (dispatch: DispatchType) => {
+
+        try {
+            dispatch(authActions.setIsLoading(true));
+            const data = await userApi.updateUser(id,formData)
+
+            console.log(data,updateUserTC)
+            dispatch(authActions.setUser(data.data.user))
+            localStorage.setItem('profile',JSON.stringify({...formData}))
+        } catch (e:any) {
+            dispatch(errorActions.setIsOpen(true));
+            dispatch(errorActions.setIsOpen(e.response.data.message));
+
+        } finally {
+            dispatch(usersActions.setIsLoading(false));
+        }
+
     }
 }
 

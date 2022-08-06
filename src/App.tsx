@@ -39,14 +39,12 @@ function App() {
         <div className={'App'}>
             <div className={'blur'}></div>
             <div className={'blur'}></div>
-            {/*<Home/>*/}
-            {/*<Profile/>*/}
             <Routes>
                 <Route path={'/'} element={isAuth ? <Navigate to={'home'}/> : <Navigate to='auth'/>}/>
                 <Route path={'/home'} element={isAuth ? <Home/> : <Navigate to='../auth'/>}/>
                 <Route path={'/auth'} element={isAuth ? <Navigate to={'../home'}/> : <Auth/>}/>
+                <Route path={'/profile/:id'} element={isAuth ? <Profile/> : <Navigate to={'../auth'}/>}/>
             </Routes>
-            {/*<Auth/>*/}
             {isOpen && <SnackBar onClose={onCloseSnackBar} title={'Ошибка'} variant={'filled'} color={'red'}
                                  text={messageError}/>}
         </div>

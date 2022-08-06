@@ -23,4 +23,8 @@
     align-items: flex-start;
     gap: 1.5rem;
   }
+  .detail{
+    display: flex;
+    flex-direction: column;
+  }
 }
