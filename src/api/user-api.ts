@@ -1,13 +1,25 @@
 import {instance} from "./index";
-import {ProfileDataType} from "../components/ProfileModal/ProfileModal";
+import {InfoCardUserType} from "../components/InfoCard/InfoCard";
+
+
+
+
 
 
 export const userApi = {
-    getUser(userId?:string){
+    getUser(userId?: string) {
         return instance.get(`/user/${userId}`)
     },
-    updateUser(id:string,formData: any){
-        console.log(formData,'api')
-        return instance.put(`/user/${id}`,formData)
+    updateUser(id: string, formData: InfoCardUserType) {
+        return instance.put(`/user/${id}`, formData)
+    },
+    getAllUser() {
+        return instance.get('/user')
+    },
+    followUser(id: string, data: InfoCardUserType):Promise<void> {
+        return instance.put(`/user/${id}/follow`, data)
+    },
+    unFollowUser(id: string, data: InfoCardUserType):Promise<void> {
+        return instance.put(`/user/${id}/unfollow`, data)
     }
 }

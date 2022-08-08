@@ -21,8 +21,9 @@ function uploadImage(data: FormData): any {
         try {
             await postApi.uploadImage(data)
         } catch (e: any) {
-            dispatch(errorActions.setIsOpen(true))
-            dispatch(errorActions.setMessageError(e.response.data.message))
+            console.log(e)
+            // dispatch(errorActions.setIsOpen(true))
+            // dispatch(errorActions.setMessageError(e.response.data.message))
         }
     }
 }
@@ -47,7 +48,6 @@ function getTimeLinePosts(id: string): any {
         try {
             dispatch(postActions.setIsLoading(true))
             const post = await postApi.getTimeLinePosts(id)
-            console.log(post.data, 'getTimeLinePosts')
             dispatch(postActions.setPosts(post.data))
         } catch (e: any) {
             dispatch(errorActions.setIsOpen(true))

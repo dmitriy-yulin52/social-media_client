@@ -30,6 +30,32 @@ export const authReducer = (state: InitialStateType = initialState, action: Acti
                 ...state,
                 isError: action.payload
             }
+        case ActionTypeNames.FOLLOW_USER:
+            if(!state.user){
+                return {
+                    ...state
+                }
+            }
+            return {
+                ...state,
+                user: {
+                    ...state.user,
+                    following: [...state.user?.following ?? [], action.payload]
+                }
+            }
+        case ActionTypeNames.UNFOLLOW_USER:
+             if(!state.user){
+                return {
+                    ...state
+                }
+            }
+            return {
+                ...state,
+                user: {
+                    ...state.user,
+                    following: state.user?.following.filter((el) => el !== action.payload) ?? []
+                }
+            }
         default:
             return state
     }

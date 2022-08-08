@@ -1,13 +1,12 @@
 import * as React from 'react';
+import {FC, memo, ReactElement, useCallback, useState} from 'react';
 import './Post.scss'
-import {FC, memo, ReactElement, useCallback, useState} from "react";
 
 import Comment from '../../assets/img/comment.png'
 import Share from '../../assets/img/share.png'
 import Heart from '../../assets/img/like.png'
 import NotLike from '../../assets/img/notlike.png'
 import {postApi, ResponsePostType} from "../../api/post-api";
-import {useDispatch} from "react-redux";
 
 
 type PostProps = {
@@ -20,7 +19,8 @@ type PostProps = {
 const style = {
     cursor: 'pointer'
 } as const
-export const Post: FC<PostProps> = memo(({data, userId, username}): ReactElement => {
+export const Post: FC<PostProps> = memo(({data, userId, username}): ReactElement | null => {
+
 
     const [liked, setLiked] = useState(data.likes.includes(userId))
     const [likes, setLikes] = useState(data.likes.length)
@@ -47,7 +47,7 @@ export const Post: FC<PostProps> = memo(({data, userId, username}): ReactElement
             <span className={'Post-likes'}>{likes} likes</span>
 
             <div className="detail">
-                <span><b>{username}</b></span>
+                {/*<span><b>{username}</b></span>*/}
                 <span> {data.desc} </span>
             </div>
         </div>

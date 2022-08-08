@@ -13,14 +13,17 @@ type SnackBarProps = {
 
 
 const styleAlert = {
-    position: 'relative',
-    top: '-150px',
-    width: '300px'
+
 } as const
 
 const styleWrapper = {
     display: 'flex',
-    justifyContent: 'center'
+    justifyContent: 'center',
+    position: 'absolute',
+    width: '300px',
+    top:'785px',
+    right:'500px',
+    height: '90px',
 }as const
 
 export const SnackBar: FC<SnackBarProps> = memo((props): ReactElement => {

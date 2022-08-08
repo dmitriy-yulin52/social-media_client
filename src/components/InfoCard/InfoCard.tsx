@@ -36,7 +36,6 @@ export const InfoCard = (props: InfoCardProps) => {
 
     const [profileUser, setProfileUser] = useState<InfoCardUserType>({} as InfoCardUserType)
 
-
     const {user} = useTypedSelector(state => state.auth)
 
 
@@ -83,20 +82,20 @@ export const InfoCard = (props: InfoCardProps) => {
                 <span>
                     <b>Статус </b>
                 </span>
-                <span>{user && (user?.relationship ?? 'Без отношений')}</span>
+                <span>{profileUser && (profileUser?.relationship ?? 'Без отношений')}</span>
             </div>
 
             <div className="info">
                 <span>
                     <b>Живет в </b>
                 </span>
-                <span>{user && (user?.livesin ?? 'Городе')}</span>
+                <span>{user && (profileUser?.livesin ?? 'Городе')}</span>
             </div>
             <div className="info">
                 <span>
                     <b>Работа </b>
                 </span>
-                <span> {user && (user?.worksAt ?? 'Front-end developer')}</span>
+                <span> {user && (profileUser?.worksAt ?? 'Front-end developer')}</span>
             </div>
             <button className={'button logout-button'} onClick={onLogoutHandler}>Выйти</button>
         </div>

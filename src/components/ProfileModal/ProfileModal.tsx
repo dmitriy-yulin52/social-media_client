@@ -48,19 +48,19 @@ export const ProfileModal: FC<ProfileModalProps> = memo(function ProfileModal(pr
     }, [setFormData])
 
 
-    console.log(formData,'formData')
 
 
-    // useEffect(() => {
-    //     setFormData({
-    //         firstname: '',
-    //         lastname: '',
-    //         worksAt: '',
-    //         livesin: '',
-    //         country: '',
-    //         relationship: '',
-    //     })
-    // }, [])
+    useEffect(() => {
+        setFormData((prevState)=>({
+            ...prevState,
+            firstname: '',
+            lastname: '',
+            worksAt: '',
+            livesin: '',
+            country: '',
+            relationship: '',
+        }))
+    }, [])
 
 
     const onChangeImageHandler = useCallback((e: ChangeEvent<HTMLInputElement>) => {
@@ -71,7 +71,7 @@ export const ProfileModal: FC<ProfileModalProps> = memo(function ProfileModal(pr
     }, [setProfileImage, setCoverImage])
 
 
-    const handlerSubmit = async (e: MouseEvent<HTMLButtonElement>) => {
+    const handlerSubmit =  useCallback(async(e: MouseEvent<HTMLButtonElement>) => {
         e.preventDefault()
         let userData = formData
         if (profileImage) {
@@ -98,9 +98,9 @@ export const ProfileModal: FC<ProfileModalProps> = memo(function ProfileModal(pr
                 console.log(err);
             }
         }
-            dispatch(authActions.updateUserTC(userData._id ?? '1', userData))
+            dispatch(authActions.updateUserTC(param.id ?? '1', userData))
         setModalOpened()
-    }
+    },[coverImage, dispatch, formData, profileImage, setModalOpened,param])
 
     return (
         <Modal

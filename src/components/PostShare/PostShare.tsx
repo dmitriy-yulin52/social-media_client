@@ -1,13 +1,8 @@
 import * as React from 'react';
+import {ChangeEvent, MouseEvent, useCallback, useRef, useState} from 'react';
 import './PostShare.scss'
 import ProfileLogo from '../../assets/img/defaultProfile.png'
-import profileImage from '../../assets/img/profileImg.jpg'
-import {UilScenery} from '@iconscout/react-unicons'
-import {UilPlayCircle} from '@iconscout/react-unicons'
-import {UilLocationPoint} from '@iconscout/react-unicons'
-import {UilSchedule} from '@iconscout/react-unicons'
-import {UilTimes} from '@iconscout/react-unicons'
-import {ChangeEvent, useCallback, useRef, useState, MouseEvent} from "react";
+import {UilLocationPoint, UilPlayCircle, UilScenery, UilSchedule, UilTimes} from '@iconscout/react-unicons'
 import {useTypedSelector} from "../../utils/hooks/useTypedSelector";
 import {useDispatch} from "react-redux";
 import {postActions} from "../../store/reducers/post/post-actions";
@@ -62,35 +57,41 @@ export const PostShare = (props: Props) => {
 
     const handleSubmitShare = useCallback((e: MouseEvent<HTMLButtonElement>) => {
         e.preventDefault();
-        let newPost: PostRequestType = {} as PostRequestType
 
-        if (user) {
-            newPost = {
-                userId: user._id,
-                desc: descRef.current ? descRef.current.value : '',
-                image:''
-            }
-        }
-        if (image) {
-            if (image.imageFile) {
-                const data = new FormData();
-                const filename = Date.now() + image.imageFile.name;
-                data.append('name', filename)
-                data.append('file', image.imageFile);
-                newPost.image = filename;
-                try {
-                    dispatch(postActions.uploadImage(data))
-                } catch (e) {
-                    console.log(e, 'handleSubmitShare')
+        if (descRef.current) {
+            let newPost: PostRequestType = {} as PostRequestType
+
+            if (user) {
+                newPost = {
+                    userId: user._id,
+                    desc: descRef.current ? descRef.current.value : '',
+                    image: ''
                 }
             }
+            if (image) {
+                if (image.imageFile) {
+                    const data = new FormData();
+                    const filename = Date.now() + image.imageFile.name;
+                    data.append('name', filename)
+                    data.append('file', image.imageFile);
+                    newPost.image = filename;
+                    try {
+                        dispatch(postActions.uploadImage(data))
+                    } catch (e) {
+                        console.log(e, 'handleSubmitShare')
+                    }
+                }
+            }
+            dispatch(postActions.uploadPost(newPost))
+            setImage(null)
+            if (descRef.current) {
+                descRef.current.value = ''
+            }
+        }else{
+            alert('noe')
         }
-        dispatch(postActions.uploadPost(newPost))
-        setImage(null)
-        if (descRef.current) {
-            descRef.current.value = ''
-        }
-    }, [dispatch, image, user,setImage])
+
+    }, [dispatch, image, user, setImage])
 
 
     return (

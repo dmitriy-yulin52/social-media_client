@@ -12,6 +12,8 @@ export enum ActionTypeNames {
     UPDATE_USER = 'auth/UPDATE_USER',
     SET_IS_ERROR = 'auth/SET_IS_ERROR',
     SET_ERROR_MESSAGE = 'auth/SET_ERROR_MESSAGE',
+       FOLLOW_USER = 'auth/FOLLOW_USER',
+    UNFOLLOW_USER = 'auth/UNFOLLOW_USER',
 }
 
 
@@ -70,8 +72,16 @@ export type UpdateUserType = {
     payload: ProfileDataType
 }
 
+export type SetFollowUserType = {
+    type: ActionTypeNames.FOLLOW_USER
+    payload: string
+}
+export type SetUnfollowUserType = {
+    type: ActionTypeNames.UNFOLLOW_USER
+    payload: string
+}
 
-export type ActionsType = SetIsAuthType | SetIsLoadingType | SetUserType | SetIsErrorType | SetErrorMessageType | UpdateUserType
+export type ActionsType = SetIsAuthType | SetIsLoadingType | SetUserType | SetIsErrorType | SetErrorMessageType | UpdateUserType | SetFollowUserType | SetUnfollowUserType
 
 export interface ThunkData {
     api?: ReturnType<typeof authApi>;

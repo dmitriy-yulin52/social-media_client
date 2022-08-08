@@ -14,7 +14,6 @@ export const ProfileCard: FC<ProfileCardProps> = memo(({location}): ReactElement
     const {user} = useTypedSelector(state => state.auth)
     const {posts} = useTypedSelector(state => state.posts)
 
-
     if (!user) {
         return null
     }
@@ -23,24 +22,24 @@ export const ProfileCard: FC<ProfileCardProps> = memo(({location}): ReactElement
     return (
         <div className={'ProfileCard'}>
             <div className="ProfileImages">
-                <img src={Cover} alt="Cover"/>
-                <img src={ProfileLogo} alt="ProfileLogo"/>
+                <img src={user.coverPicture ? 'http://localhost:5555/images/' + user.coverPicture : Cover} alt="Cover"/>
+                <img src={user.profilePicture ? 'http://localhost:5555/images/' + user.profilePicture : ProfileLogo} alt="ProfileLogo"/>
             </div>
             <div className="ProfileName">
                 <span>{user.firstname} {user.lastname}</span>
-                <span>Front-end разработчик</span>
+                <span>{user.worksAt}</span>
             </div>
 
             <div className="followStatus">
                 <hr/>
                 <div className={'block'}>
                     <div className="follow">
-                        <span>{user.following.length === 0 ? 0 : user.following.length }</span>
+                        <span>{user.following.length}</span>
                         <span>Подписки</span>
                     </div>
                     <div className="vl"></div>
                     <div className="follow">
-                        <span>{user.followers.length === 0 ? 0 : user.followers.length}</span>
+                        <span>{user.followers.length}</span>
                         <span>Подписчики</span>
                     </div>
                     {location === 'ProfilePage' &&

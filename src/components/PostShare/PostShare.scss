@@ -1,9 +1,11 @@
 @import 'src/styles/variables';
 
 .PostShare {
+  position: sticky;
+  top: 0;
   display: flex;
   gap: 1rem;
-  background-color: $cardColor;
+  background-color: white;
   padding: 1rem;
   border-radius: 1rem;
 

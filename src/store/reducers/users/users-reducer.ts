@@ -4,7 +4,6 @@ import {ActionType, ActionTypeNames, initialState, InitialStateType} from "./use
 export const usersReducer = (state: InitialStateType = initialState, action: ActionType): InitialStateType => {
 
     switch (action.type) {
-
         case ActionTypeNames.SET_USERS:
             return {
                 ...state,
@@ -15,6 +14,7 @@ export const usersReducer = (state: InitialStateType = initialState, action: Act
                 ...state,
                 isLoading: action.payload
             }
+
         default:
             return state
     }

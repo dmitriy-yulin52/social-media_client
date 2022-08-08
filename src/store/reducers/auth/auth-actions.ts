@@ -3,15 +3,13 @@ import {FormDataType} from "../../../pages/Auth/Auth";
 import {authApi} from "../../../api/auth-api";
 import {
     ActionTypeNames,
-    SetErrorMessageType,
+    SetErrorMessageType, SetFollowUserType,
     SetIsAuthType,
     SetIsErrorType,
-    SetIsLoadingType,
-    SetUserType,
-    UpdateUserType
+    SetIsLoadingType, SetUnfollowUserType,
+    SetUserType
 } from "./auth-types";
 import {errorActions} from "../error/error-actions";
-import {ProfileDataType} from "../../../components/ProfileModal/ProfileModal";
 import {userApi} from "../../../api/user-api";
 import {usersActions} from "../users/users-actions";
 import {InfoCardUserType} from "../../../components/InfoCard/InfoCard";
@@ -25,18 +23,21 @@ export const authActions = {
     }),
     setIsAuth: (isAuth: boolean): SetIsAuthType => ({type: ActionTypeNames.SET_IS_AUTH, payload: isAuth}),
     setUser: (user: InfoCardUserType | null): SetUserType => {
-                console.log(user,'InfoCardUserType')
-        return {type: ActionTypeNames.SET_USER, payload: user}},
+        console.log(user, 'InfoCardUserType')
+        return {type: ActionTypeNames.SET_USER, payload: user}
+    },
     register,
     setIsError: (isError: boolean): SetIsErrorType => ({type: ActionTypeNames.SET_IS_ERROR, payload: isError}),
     setMessageError: (messageError: string | null): SetErrorMessageType => ({
         type: ActionTypeNames.SET_ERROR_MESSAGE,
         payload: messageError
     }),
-
+    setFollowUser: (id: string): SetFollowUserType => ({type: ActionTypeNames.FOLLOW_USER, payload: id}),
+    setUnFollowUser: (id: string): SetUnfollowUserType => ({type: ActionTypeNames.UNFOLLOW_USER, payload: id}),
     logout,
     updateUserTC,
-    updateUserAC:(user:ProfileDataType):UpdateUserType=>({type:ActionTypeNames.UPDATE_USER,payload:user})
+    followUserTC,
+    unFollowUserTC
 
 }
 
@@ -48,13 +49,12 @@ function register(formData: FormDataType): any {
         try {
             dispatch(authActions.setIsLoading(true));
             const {data} = await authApi().register(rest)
-            const {token,...user} = data
-            console.log(data,'data . ergister')
-            console.log(user.user,'ergister')
+            const {token, ...user} = data
             dispatch(authActions.setUser(user.user))
             dispatch(authActions.setIsAuth(true));
-            window.localStorage.setItem('authRegister', 'true')
-            window.localStorage.setItem('authRegister-user', JSON.stringify(user.user))
+            localStorage.setItem('authRegister', 'true')
+            localStorage.setItem('token', token)
+            localStorage.setItem('profile', JSON.stringify(user.user))
         } catch (e: any) {
             dispatch(errorActions.setIsOpen(true))
             dispatch(errorActions.setMessageError(e.response.data.message))
@@ -69,12 +69,13 @@ function login(formData: { password: string, username: string }): any {
         try {
             dispatch(authActions.setIsLoading(true));
             const {data} = await authApi().login(formData)
-            const {token,...rest} = data
+            const {token, ...rest} = data
             delete rest.user.password
             dispatch(authActions.setUser(rest.user));
             dispatch(authActions.setIsAuth(true));
             localStorage.setItem('authRegister', 'true')
-            localStorage.setItem('authRegister-user', JSON.stringify(rest.user))
+            localStorage.setItem('token', token)
+            localStorage.setItem('profile', JSON.stringify(rest.user))
         } catch (e: any) {
             dispatch(errorActions.setIsOpen(true))
             dispatch(errorActions.setMessageError(e.response.data.message))
@@ -85,43 +86,73 @@ function login(formData: { password: string, username: string }): any {
 }
 
 
-function logout():any{
-    return (dispatch:DispatchType)=>{
-        try{
+function logout(): any {
+    return (dispatch: DispatchType) => {
+        try {
+            dispatch(authActions.setIsLoading(true));
             dispatch(authActions.setUser(null));
             dispatch(authActions.setIsAuth(false));
             localStorage.removeItem('authRegister')
-            localStorage.removeItem('authRegister-user')
-        }catch (e:any) {
+            localStorage.removeItem('profile')
+            localStorage.removeItem('token')
+        } catch (e: any) {
             dispatch(errorActions.setIsOpen(true))
             dispatch(errorActions.setMessageError(e.response.data.message))
+        } finally {
+            dispatch(authActions.setIsLoading(false));
         }
     }
 }
 
-function updateUserTC(id: string, formData:  InfoCardUserType):any {
-
-
-    console.log(formData,'updateUserTC')
-
+function updateUserTC(id: string, formData: InfoCardUserType): any {
     return async (dispatch: DispatchType) => {
-
         try {
             dispatch(authActions.setIsLoading(true));
-            const data = await userApi.updateUser(id,formData)
-
-            console.log(data,updateUserTC)
+            const data = await userApi.updateUser(id, formData)
             dispatch(authActions.setUser(data.data.user))
-            localStorage.setItem('profile',JSON.stringify({...formData}))
-        } catch (e:any) {
+            localStorage.setItem('profile', JSON.stringify({...formData}))
+        } catch (e: any) {
             dispatch(errorActions.setIsOpen(true));
             dispatch(errorActions.setIsOpen(e.response.data.message));
 
         } finally {
             dispatch(usersActions.setIsLoading(false));
         }
+    }
+}
+
+function followUserTC(id: string, data: InfoCardUserType): any {
+    return async (dispatch: DispatchType) => {
+        try {
+            dispatch(usersActions.setIsLoading(true))
+            await userApi.followUser(id, data)
+            dispatch(authActions.setFollowUser(id))
+        } catch (e: any) {
+            dispatch(errorActions.setIsOpen(true));
+            dispatch(errorActions.setIsOpen(e.response.data.message));
+        } finally {
+            dispatch(usersActions.setIsLoading(false))
+        }
 
     }
 }
+
+function unFollowUserTC(id: string, data: InfoCardUserType): any {
+    return async (dispatch: DispatchType) => {
+        try {
+            dispatch(usersActions.setIsLoading(true))
+            await userApi.unFollowUser(id, data)
+            dispatch(authActions.setUnFollowUser(id))
+        } catch (e: any) {
+            dispatch(errorActions.setIsOpen(true));
+            dispatch(errorActions.setIsOpen(e.response.data.message));
+        } finally {
+            dispatch(usersActions.setIsLoading(false))
+        }
+    }
+}
+
+
+
 
 

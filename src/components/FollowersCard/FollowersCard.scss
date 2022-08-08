@@ -1,3 +1,4 @@
+@import 'src/styles/variables';
 
 .FollowerCard {
   width: 100%;
@@ -15,6 +16,10 @@
     .block {
       display: flex;
       gap: 10px;
+      img{
+        border-radius: 50%;
+        object-fit: cover;
+      }
 
       .followerImg {
         width: 3.2rem;
@@ -35,6 +40,13 @@
     .fc-button {
       height: 2rem;
       padding: 0 20px;
+    }
+
+    .UnfollowButton{
+      color: $orange;
+      border: 2px solid $orange;
+      cursor: pointer;
+      background: transparent;
     }
   }
 }
