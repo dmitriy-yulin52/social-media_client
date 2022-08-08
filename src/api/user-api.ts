@@ -1,5 +1,6 @@
 import {instance} from "./index";
 import {InfoCardUserType} from "../components/InfoCard/InfoCard";
+import {AxiosResponse} from "axios";
 
 
 
@@ -7,8 +8,8 @@ import {InfoCardUserType} from "../components/InfoCard/InfoCard";
 
 
 export const userApi = {
-    getUser(userId?: string) {
-        return instance.get(`/user/${userId}`)
+    getUser(userId?: string):Promise<AxiosResponse<InfoCardUserType>> {
+        return instance.get<InfoCardUserType>(`/user/${userId}`)
     },
     updateUser(id: string, formData: InfoCardUserType) {
         return instance.put(`/user/${id}`, formData)

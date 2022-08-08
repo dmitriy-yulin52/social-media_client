@@ -10,10 +10,11 @@ import {authActions} from "./store/reducers/auth/auth-actions";
 import {Navigate, Routes, Route} from "react-router-dom";
 import {useTypedSelector} from "./utils/hooks/useTypedSelector";
 import {errorActions} from "./store/reducers/error/error-actions";
+import {Chat} from "./pages/Chat/Chat";
 
 function App() {
 
-    const {isAuth, user} = useTypedSelector(state => state.auth)
+    const {isAuth,user} = useTypedSelector(state => state.auth)
     const {isOpen, messageError} = useSelector((state: RootStateType) => state.error)
 
     const dispatch = useDispatch()
@@ -25,16 +26,13 @@ function App() {
         dispatch(authActions.setMessageError(null))
     }, [dispatch])
 
-    //
-    // useEffect(() => {
-    //     const authLS = localStorage.getItem('authRegister')
-    //     const userLS = localStorage.getItem('authRegister-user')
-    //     if (authLS) {
-    //             dispatch(authActions.setIsAuth(true))
-    //             dispatch(authActions.setUser(JSON.parse(userLS!)))
-    //         }
-    // }, [])
 
+
+    // useEffect(()=>{
+    //     if(localStorage){
+    //
+    //     }
+    // },[])
     return (
         <div className={'App'}>
             <div className={'blur'}></div>
@@ -44,6 +42,7 @@ function App() {
                 <Route path={'/home'} element={isAuth ? <Home/> : <Navigate to='../auth'/>}/>
                 <Route path={'/auth'} element={isAuth ? <Navigate to={'../home'}/> : <Auth/>}/>
                 <Route path={'/profile/:id'} element={isAuth ? <Profile/> : <Navigate to={'../auth'}/>}/>
+                <Route path={'/chat'} element={user ? <Chat/> : <Navigate to={'../auth'}/>}/>
             </Routes>
             {isOpen && <SnackBar onClose={onCloseSnackBar} title={'Ошибка'} variant={'filled'} color={'red'}
                                  text={messageError}/>}

@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {ChangeEvent, MouseEvent, useCallback, useRef, useState} from 'react';
+import {ChangeEvent, FC, MouseEvent, ReactElement, useCallback, useRef, useState} from 'react';
 import './PostShare.scss'
 import ProfileLogo from '../../assets/img/defaultProfile.png'
 import {UilLocationPoint, UilPlayCircle, UilScenery, UilSchedule, UilTimes} from '@iconscout/react-unicons'
@@ -22,7 +22,7 @@ export type PostRequestType = {
     likes?: string[],
     image?: string
 }
-export const PostShare = (props: Props) => {
+export const PostShare:FC = ():ReactElement | null => {
 
     const {user} = useTypedSelector(state => state.auth)
     const {isLoading} = useTypedSelector(state => state.posts)
@@ -87,16 +87,21 @@ export const PostShare = (props: Props) => {
             if (descRef.current) {
                 descRef.current.value = ''
             }
-        }else{
+        } else {
             alert('noe')
         }
 
     }, [dispatch, image, user, setImage])
 
 
+    if (!user) {
+        return null
+    }
+
     return (
         <div className={'PostShare'}>
-            <img src={ProfileLogo} className={'PostShare-img'} alt="ProfileImage"/>
+            <img src={user.profilePicture ? 'http://localhost:5555/images/' + user.profilePicture : ProfileLogo}
+                 className={'PostShare-img'} alt="ProfileImage"/>
             <div className={'inputBlock'}>
                 <input ref={descRef} required type="text" placeholder={'Что происходит'}/>
                 <div className="postOptions">

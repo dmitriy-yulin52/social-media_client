@@ -1,0 +1,55 @@
+@import 'src/styles/variables';
+
+.ChatBox-container {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  background: $cardColor;
+  border-radius: 1rem;
+  padding: 1rem;
+  overflow: scroll;
+  height: auto;
+  min-height: 80vh;
+
+  .chat-body {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    padding: 1.5rem;
+    overflow: scroll;
+  }
+}
+
+.message {
+  background: $buttonBg;
+  color: white;
+  padding: 0.7rem;
+  border-radius: 1rem 1rem 1rem 0;
+  max-width: 28rem;
+  width: fit-content;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.own {
+  align-self: flex-end;
+  border-radius: 1rem 1rem 0 1rem;
+  background: linear-gradient(98.63deg, #24e4f0 0%, #358ff9 100%);
+}
+
+.chat-sender{
+  display: flex;
+
+}
+
+.send-button{
+  padding:8px;
+}
+
+.chatbox-empty{
+   display: flex;
+  align-self: center;
+  justify-content: center;
+  font-size: 20px;
+}

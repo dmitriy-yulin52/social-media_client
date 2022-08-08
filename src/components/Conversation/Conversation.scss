@@ -1,0 +1,55 @@
+@import 'src/styles/variables';
+
+.follower {
+  .follower-block {
+    display: flex;
+    justify-content: flex-start;
+    align-self: center;
+
+    img {
+      width: 2.5rem;
+      height: 2.5rem;
+      border-radius: 50%;
+      box-shadow: $profileShadow;
+      object-fit: cover;
+      margin-right: 8px;
+    }
+
+    .online-dot {
+      background-color: greenyellow;
+      border-radius: 50%;
+      position: absolute;
+      left: 30px;
+      top: -5px;
+      width: 1rem;
+      height: 1rem;
+    }
+
+    .name {
+      display: flex;
+      flex-direction: column;
+        span:nth-of-type(1) {
+          margin-right: 8px;
+          word-break: break-all;
+          font-weight: 700;
+        }
+    }
+  }
+
+}
+
+.conversation:hover {
+  background: #80808038;
+  cursor: pointer;
+}
+
+.conversation {
+  border-radius: 0.5rem;
+  padding: 10px;
+
+  div:nth-of-type(1) {
+    position: relative;
+  }
+}
+
+
