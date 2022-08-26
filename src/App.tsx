@@ -1,4 +1,4 @@
-import React, {useCallback, useEffect} from 'react';
+import React, {useCallback} from 'react';
 import './App.scss'
 import {Home} from "./pages/home/Home";
 import {Profile} from "./pages/Profile/Profile";
@@ -26,13 +26,6 @@ function App() {
         dispatch(authActions.setMessageError(null))
     }, [dispatch])
 
-
-
-    // useEffect(()=>{
-    //     if(localStorage){
-    //
-    //     }
-    // },[])
     return (
         <div className={'App'}>
             <div className={'blur'}></div>
